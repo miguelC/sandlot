@@ -1,0 +1,61 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang" 
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"  
+       xmlns:p="http://www.springframework.org/schema/p"   
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    
+    <!-- Audits data source configuration -->
+    
+    <bean id="auditSerializerMap" class="net.sandlotnow.interop.audit.InteropAuditSerializerMap">
+        <!-- <property name="messageSerializers">
+            <map>
+                <entry key="">
+                    <bean class="com.mkyong.common.Person"/>
+                </entry>
+            </map>
+        </property> -->
+    </bean>
+    
+    <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans -->
+    <context:component-scan base-package="net.sandlotnow.interop.audit" />
+    <!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+    <context:annotation-config />
+    
+    <tx:annotation-driven transaction-manager="transactionManagerAudit" />
+    
+    <bean id="auditDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/interopaudits"/>
+        <property name="username" value="interopsvc"/>
+        <property name="password" value="Sandlot1!"/>
+    </bean>
+
+    <bean id="entityManagerFactoryAudit"
+            class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+            p:packagesToScan="net.sandlotnow.interop.audit"
+            p:dataSource-ref="auditDataSource"
+            >
+        <property name="persistenceUnitName" value="sandlotAuditPersistence" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="true" />
+                <property name="showSql" value="true" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="transactionManagerAudit" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactoryAudit" />
+    </bean>
+    
+</beans>

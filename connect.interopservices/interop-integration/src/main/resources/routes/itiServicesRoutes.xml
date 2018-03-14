@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"  
+       xmlns:cxf="http://camel.apache.org/schema/cxf"     
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core-2.5.xsd
+http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+    <!-- this is an included XML file where we only the the routeContext -->
+    <routeContext id="itiServicesRoutes" xmlns="http://camel.apache.org/schema/spring">
+                
+        <camel:route id="webServiceIti18">
+          <camel:from uri="xds-iti18:iti18Service"/>
+          <camel:process ref="iti18Processor"/>
+        </camel:route>
+        
+        <camel:route id="webServiceIti41">
+          <camel:from uri="xds-iti41:iti41Service"/>
+          <camel:process ref="iti41Processor"/>
+        </camel:route>
+        
+        <camel:route id="webServiceIti43">
+          <camel:from uri="xds-iti43:iti43Service"/>
+          <camel:process ref="iti43Processor"/>
+        </camel:route>
+        
+        <camel:route id="webServiceIti44">
+          <camel:from uri="pixv3-iti44:iti44Service"/>
+          <camel:process ref="iti44Processor"/>
+        </camel:route>
+        
+        <camel:route id="webServiceIti45">
+          <camel:from uri="pixv3-iti45:iti45Service"/>
+          <camel:process ref="iti45Processor"/>
+        </camel:route>
+        
+        <camel:route id="webServiceIti47">
+          <camel:from uri="pdqv3-iti47:iti47Service"/>
+          <camel:process ref="iti47Processor"/>
+        </camel:route>
+        
+    </routeContext>
+            
+</beans>

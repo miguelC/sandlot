@@ -1,0 +1,306 @@
+body{
+	max-width: 100%;
+	height: auto;
+}
+
+#grailLogo{
+	width: 100%; 
+	background-color: #ffffff;
+	border-style: none;
+    border-bottom: ridge #000000;
+    
+}
+.appName { 
+	display: inline; 
+	font-size: 2.5em;
+	text-align: right;
+	width:100%;
+}
+
+.rightAlign{
+	 display: inline; 
+	 text-align: right;
+     float: right;
+}
+.right-border{
+	background-color: #ffffff;
+	 border-style: none;
+     border-right: ridge #000000;
+}
+.body-div{
+	min-height: 420px;
+    height: auto !important;
+    height: 420px;
+}
+.footer{
+	position: relative;
+	bottom: 0;
+	width: 100%; 
+	background-color: #ffffff;
+	border-style: none;
+    border-top: ridge #000000;
+    
+}
+.sitemark{
+	float:right;
+}
+
+#OpenFileDialog{
+    display:none;
+}
+
+.modal-footer{
+	    text-align: center !important;
+}
+
+#list-ADList{
+	height: 243px;   
+	overflow-y : scroll;
+}
+
+tr:hover {
+  background: #ffffff !important;
+}
+
+img:hover{
+cursor: hand; 
+cursor: pointer;
+}
+
+#messageDetail .modal-content
+{
+  height: 600px;  
+  overflow-y:scroll;
+}
+
+.modal-body {
+  text-align: center;
+}
+.modal-header{
+	border-bottom: 0 !important;
+}
+
+.sectionHeader { 
+    display: inline; 
+    font-size: 2.0em;
+    text-align: right;
+    width:100%;
+    color: #6E6E6E;
+}
+
+.sectionHeaderSmall { 
+    display: inline; 
+    font-size: 1.5em;
+    text-align: right;
+    width:100%;
+    color: #585858;
+}
+
+.custom-fieldcontain label{
+	width: 100% !important;
+}
+
+#addModal .modal-content, #updateModal .modal-content{
+	width: 70%;
+}
+
+#addModal div.col-sm-7, #updateModal div.col-sm-7{
+	text-align: left;
+}
+
+/* Navigation link
+*/
+
+.pagination{
+	color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    -webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+.pagination a:hover{
+	background-color: #48802c;
+    color: #ffffff;
+}
+.pagination a{
+	color: #ffffff;
+}
+
+.rightButton{
+	 display: inline;
+	float: right;
+	margin: 20px 0;
+}
+
+.whitefont a{
+	color: #ffffff;
+}
+
+.leftButton{
+	 display: inline;
+	float: left;
+	margin: 20px 0;
+}
+.caret-up {
+    width: 0; 
+    height: 0; 
+    border-left: 4px solid rgba(0, 0, 0, 0);
+    border-right: 4px solid rgba(0, 0, 0, 0);
+    border-bottom: 4px solid;
+    
+    display: inline-block;
+    margin-left: 2px;
+    vertical-align: middle;
+}
+table td{
+	/* white-space: nowrap;	 */
+	overflow: hidden;
+	padding-left: 10px;
+}
+table th{
+	padding-left: 10px;
+}
+
+td.details-control {
+    background: url('../images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../images/details_close.png') no-repeat center center;
+}
+
+.rowClassStyling {
+	
+	margin-top: 3px;
+}
+
+.leftAlignText {
+	
+	text-align: left;
+}
+
+.rightAlignText {
+	
+	text-align: right;
+}
+
+.centerAlignText {
+    
+    text-align: center;
+}
+
+.tableStylingTransactionTable {
+	
+   table-layout: fixed !important;
+}
+
+.divStylingTransactionTable {
+	
+	max-height: 200px !important;
+	overflow: auto;
+}
+
+.width5{
+	
+	width: 5%;
+}
+
+.width9{
+	
+	width: 9%;
+}
+
+.width15{
+	
+	width: 15%;
+}
+
+.width20{
+	
+	width: 20%;
+}
+
+.width26 {
+	width: 26%;
+}
+
+.width100 {
+	
+	width: 100%;
+}
+
+.width110 {
+	
+	width: 110%;
+}
+
+.margin_left {
+	
+	margin-left: 5px;
+}
+
+.modalBackgroundColor {
+	
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.float_left {
+	
+	float: left;
+}
+
+.floatright {
+	
+	float: right;
+}
+
+.textStyling {
+	
+	float: left;
+	margin-right: 2px;
+}
+
+.break-word {
+	word-wrap: break-word;
+}
+
+.overflowStyling {
+	
+	overflow: auto;
+}
+
+.whiteSpaceStyling {
+	
+	white-space: nowrap;
+}
+
+.padding10{
+	
+	padding: 10px;
+}
+
+.paddingLeft50{
+	
+	padding-left:50px;
+}
+
+.margin_top25{
+	
+	margin-top: 25px;
+}
+
+.linkBtn a:link {
+	
+    color: #ffffff;
+}
+
+#spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -50px; 
+  margin-top: -50px; 
+  z-index: 5000;
+  overflow: auto;
+}

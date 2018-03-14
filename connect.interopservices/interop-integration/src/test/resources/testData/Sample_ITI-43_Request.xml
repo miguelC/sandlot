@@ -1,0 +1,6 @@
+<retrieve:RetrieveDocumentSetRequest xmlns:retrieve = "urn:ihe:iti:xds-b:2007">
+    <retrieve:DocumentRequest>
+        <retrieve:RepositoryUniqueId>1.2.840.113619.20.2.2.1</retrieve:RepositoryUniqueId>
+        <retrieve:DocumentUniqueId>2.16.840.1.113883.3.5022.4.100.5.2.5.20150817.135222222</retrieve:DocumentUniqueId>
+    </retrieve:DocumentRequest>
+</retrieve:RetrieveDocumentSetRequest>

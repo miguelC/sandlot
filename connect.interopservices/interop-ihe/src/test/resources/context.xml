@@ -1,0 +1,305 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang" 
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"  
+       xmlns:p="http://www.springframework.org/schema/p"   
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+        
+    <tx:annotation-driven transaction-manager="transactionManagerIhe" />
+    <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans -->
+    <context:component-scan base-package="net.sandlotnow.interop.ihe" />
+    <!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+    <context:annotation-config />
+    
+    <!-- IHE Data source configuration -->
+    
+    <bean id="iheDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/interopihe"/>
+        <property name="username" value="interopsvc"/>
+        <property name="password" value="Sandlot1!"/>
+    </bean>
+
+    <bean id="entityManagerFactoryIhe"
+            class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+            p:packagesToScan="net.sandlotnow.interop.ihe"
+            p:dataSource-ref="iheDataSource"
+            >
+        <property name="persistenceUnitName" value="sandlotIhePersistence" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="true" />
+                <property name="showSql" value="true" />
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="transactionManagerIhe" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactoryIhe" />
+        <qualifier value="transactionManagerIhe"/>
+    </bean>
+    
+    <bean id="testData" class="net.sandlotnow.interop.ihe.TestDataIhe">
+        <property name="transactions">
+            <list>
+                <ref bean="transactionIti18" />
+                <ref bean="transactionIti41" />
+                <ref bean="transactionIti43" />
+                <ref bean="transactionIti44" />
+                <ref bean="transactionIti45" />
+                <ref bean="transactionIti47" />
+            </list>
+        </property>
+        <property name="edgeSystems">
+            <list>
+                <ref bean="edgeSystem1AA" />
+                <ref bean="edgeSystemMpi" />
+                <ref bean="edgeSystemPxs" />
+                <ref bean="edgeSystemlocalVMPxs"/>
+                <ref bean="edgeSystemSND1"/>
+            </list>
+        </property>
+    </bean>
+    
+    <!--  Test Organization -->    
+    <bean id="edgeOrg1AA" class="net.sandlotnow.interop.ihe.model.EdgeOrganization">
+        <property name="name" value="SHG1PAR1AA" />
+        <property name="shortName" value="SHG1PAR1AA" />
+        <property name="organizationOID" value="2.16.840.1.113883.3.5022.4.100" />    
+    </bean>
+    
+    <!-- Edge System for the test organization -->
+    <bean id="edgeSystem1AA" class="net.sandlotnow.interop.ihe.model.EdgeSystem">
+        <property name="assigningAuthorityOID" value="2.16.840.1.113883.3.5022.4.100.1.1.2" />
+        <property name="documentSourceOID" value="2.16.840.1.113883.3.5022.4.100.5.2.5" />
+        <property name="name" value="SHG1PAR1AA" />
+        <property name="organization" ref="edgeOrg1AA"/>
+        <property name="endpoints">
+            <set>
+                <ref bean="endpointIti41qa" />
+            </set>
+        </property>
+        <property name="devices">
+            <set>
+                <ref bean="devicePixPdqSender1AA" />
+            </set>
+        </property>
+    </bean>
+    <bean id="endpointIti41qa" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="direct:ohpIti41Route"/>
+        <property name="transaction" ref="transactionIti41"/>
+        <property name="actor" value="SENDER"/>
+    </bean>
+    <bean id="devicePixPdqSender1AA" class="net.sandlotnow.interop.ihe.model.EdgeDevice">
+        <property name="name" value="PIX/PDQ v3 Sender Device System 1AA"/>
+        <property name="deviceOID" value="2.16.840.1.113883.3.5022.4.100.20.1"/>  
+        <property name="deviceType" value="PIXPDQDEVICE"/>
+    </bean>
+    
+    <!--  Sandlot PXS and MPI organization -->  
+    <bean id="pxsOrg" class="net.sandlotnow.interop.ihe.model.EdgeOrganization">
+        <property name="name" value="Sandlot PXS + MPI" />
+        <property name="shortName" value="Sandlot" />
+        <property name="organizationOID" value="2.16.840.1.113883.3.3281.100.400" />   
+    </bean>    
+    
+    <!-- Edge System for PXS -->
+    <bean id="edgeSystemPxs" class="net.sandlotnow.interop.ihe.model.EdgeSystem">
+        <property name="assigningAuthorityOID" value="1.2.840.113619.20.2.1.1.2" />
+        <property name="documentSourceOID" value="1.2.840.113619.20.2.2.1" />
+        <property name="name" value="PXS Document Reg/Repo" />
+        <property name="organization" ref="pxsOrg"/>
+        <property name="endpoints">
+           <set>
+            <ref bean="endpointIti18qaPxs" />
+            <ref bean="endpointIti41qaPxs" />
+        </set>
+        </property>
+    </bean>
+    
+    <bean id="endpointIti18qaPxs" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="xds-iti18://qa.sandlotnow.net/sandlotconnect/webservices/rev6/xdsb-storedquery?secure=true"/>
+        <property name="transaction" ref="transactionIti18"/>
+        <property name="actor" value="RECEIVER"/>
+    </bean>
+    <bean id="endpointIti41qaPxs" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="xds-iti41://qa.sandlotnow.net/sandlotconnect/webservices/rev6/xdsb-provideandregister?secure=true"/>
+        <property name="transaction" ref="transactionIti41"/>
+        <property name="actor" value="RECEIVER"/>
+    </bean>
+    <!-- Edge System for the MPI organization -->  
+    <bean id="edgeSystemMpi" class="net.sandlotnow.interop.ihe.model.EdgeSystem">
+        <property name="assigningAuthorityOID" value="2.16.840.1.113883.3.3281.100.400.1.1.2" />
+        <property name="documentSourceOID" value="2.16.840.1.113883.3.3281.100.400.5.2.5" />
+        <property name="name" value="MPI System" />
+        <property name="organization" ref="pxsOrg"/>
+        <property name="endpoints">
+           <set>
+            <ref bean="endpointIti45qaMpi" />
+            <ref bean="endpointIti47qaMpi" />
+          </set>
+        </property>
+    </bean>  
+    <bean id="endpointIti45qaMpi" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="pixv3-iti45://qa.sandlotnow.net/mpi/ws-secure/iti45Service?secure=true"/>
+        <property name="transaction" ref="transactionIti45"/>
+        <property name="actor" value="RECEIVER"/>
+    </bean>
+    <bean id="endpointIti47qaMpi" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="pdqv3-iti47://qa.sandlotnow.net/mpi/ws-secure/iti47Service?secure=true"/>
+        <property name="transaction" ref="transactionIti47"/>
+        <property name="actor" value="RECEIVER"/>
+    </bean>
+        
+    <!--  LOCAL VM PXS and MPI from Jun (Sandlot CentOS PXS Import) -->   
+    
+    <!--  Sandlot PXS and MPI organization -->  
+    <bean id="localVmPxsOrg" class="net.sandlotnow.interop.ihe.model.EdgeOrganization">
+        <property name="name" value="Sandlot CentOS PXS + MPI Import VM" />
+        <property name="shortName" value="Sandlot_CentOS_VM" />
+        <property name="organizationOID" value="2.16.840.1.113883.3.486.4.1.1.2.1" />   
+    </bean>  
+    
+    <!-- Edge System for PXS -->
+    <bean id="edgeSystemlocalVMPxs" class="net.sandlotnow.interop.ihe.model.EdgeSystem">
+        <property name="assigningAuthorityOID" value="2.16.840.1.113883.3.486.4.1.1.2.1.1" />
+        <property name="documentSourceOID" value="2.16.840.1.113883.3.486.4.1.1.2.1.2.5" />
+        <property name="name" value="Sandlot CentOS PXS Import VM" />
+        <property name="organization" ref="localVmPxsOrg"/>
+        <property name="endpoints">
+           <set>
+            <ref bean="endpointIti18vmPxs" />
+            <ref bean="endpointIti41vmPxs" />
+            <ref bean="endpointIti43vmPxs" />
+            <ref bean="endpointIti44vmMpi" />
+            <ref bean="endpointIti45vmMpi" />
+            <ref bean="endpointIti47vmMpi" />
+           </set>
+        </property>
+    </bean>
+    
+    <bean id="endpointIti18vmPxs" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="xds-iti18://10.211.55.6/connect/webservices/rev6/xdsb-storedquery?secure=true"/>
+        <property name="transaction" ref="transactionIti18"/>
+        <property name="actor" value="RECEIVER"/>
+    </bean>
+    <bean id="endpointIti41vmPxs" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="xds-iti41://10.211.55.6/connect/webservices/rev6/xdsb-provideandregister?secure=true"/>
+        <property name="transaction" ref="transactionIti41"/>
+        <property name="actor" value="RECEIVER"/>
+    </bean>
+    <bean id="endpointIti43vmPxs" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="xds-iti43://10.211.55.6/connect/webservices/xdsb-retrievedocuments?secure=true"/>
+        <property name="transaction" ref="transactionIti43"/>
+        <property name="actor" value="RECEIVER"/>
+    </bean>
+    
+    <!-- Endpoints for the MPI -->  
+    
+    <bean id="endpointIti44vmMpi" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="pixv3-iti44://10.211.55.6/mpi/ws-secure/iti44Service?secure=true"/>
+        <property name="transaction" ref="transactionIti44"/>
+        <property name="actor" value="RECEIVER"/>
+    </bean>
+    <bean id="endpointIti45vmMpi" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="pixv3-iti45://10.211.55.6/mpi/ws-secure/iti45Service?secure=true"/>
+        <property name="transaction" ref="transactionIti45"/>
+        <property name="actor" value="RECEIVER"/>
+    </bean>
+    <bean id="endpointIti47vmMpi" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="pdqv3-iti47://10.211.55.6/mpi/ws-secure/iti47Service?secure=true"/>
+        <property name="transaction" ref="transactionIti47"/>
+        <property name="actor" value="RECEIVER"/>
+    </bean> 
+        
+        
+    <!--  Test Organization -->    
+    <bean id="edgeOrgSND1" class="net.sandlotnow.interop.ihe.model.EdgeOrganization">
+        <property name="name" value="Sandlot Organization 1" />
+        <property name="shortName" value="SND1" />
+        <property name="organizationOID" value="2.16.840.1.113883.3.486.4.1.1.2.511" />    
+    </bean>
+    
+    <!-- Edge System for the test organization -->
+    <bean id="edgeSystemSND1" class="net.sandlotnow.interop.ihe.model.EdgeSystem">
+        <property name="assigningAuthorityOID" value="2.16.840.1.113883.3.486.4.1.1.2.511.1.2" />
+        <property name="documentSourceOID" value="2.16.840.1.113883.3.486.4.1.1.2.511.2.5" />
+        <property name="name" value="SND1" />
+        <property name="organization" ref="edgeOrgSND1"/>
+        <property name="devices">
+            <set>
+                <ref bean="devicePixPdqSenderSND1" />
+            </set>
+        </property>
+        <property name="endpoints">
+            <set>
+                <ref bean="endpointIti41vm" />
+                <ref bean="endpointIti44vm" />
+                <ref bean="endpointIti45vm" />
+            </set>
+        </property>
+    </bean>
+    <bean id="devicePixPdqSenderSND1" class="net.sandlotnow.interop.ihe.model.EdgeDevice">
+        <property name="name" value="PIX/PDQ v3 Sender Device System SND1"/>
+        <property name="deviceOID" value="2.16.840.1.113883.3.486.4.1.1.2.511.20.1"/>  
+        <property name="deviceType" value="PIXPDQDEVICE"/>
+    </bean>
+    <bean id="endpointIti41vm" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="direct:iti18RoutePXS002Iti45MPI002"/>
+        <property name="transaction" ref="transactionIti41"/>
+        <property name="actor" value="SENDER"/>
+    </bean>
+    <bean id="endpointIti45vm" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="direct:iti45RouteMPI002"/>
+        <property name="transaction" ref="transactionIti45"/>
+        <property name="actor" value="SENDER"/>
+    </bean>
+    <bean id="endpointIti44vm" class="net.sandlotnow.interop.ihe.model.EdgeEndpoint">
+        <property name="camelEndpointName" value="direct:iti44RouteMPI002"/>
+        <property name="transaction" ref="transactionIti44"/>
+        <property name="actor" value="SENDER"/>
+    </bean>
+        
+    <!-- Transactions model objects to store in database -->    
+    <bean id="transactionIti18" class="net.sandlotnow.interop.ihe.model.EdgeTransaction">
+        <property name="id" value="100"/>
+        <property name="name" value="ITI-18"/>
+        <property name="description" value="IHE ITI-18 Transaction"/>
+    </bean>
+    <bean id="transactionIti41" class="net.sandlotnow.interop.ihe.model.EdgeTransaction">
+        <property name="id" value="101"/>
+        <property name="name" value="ITI-41"/>
+        <property name="description" value="IHE ITI-41 Transaction"/>
+    </bean>
+    <bean id="transactionIti43" class="net.sandlotnow.interop.ihe.model.EdgeTransaction">
+        <property name="id" value="102"/>
+        <property name="name" value="ITI-43"/>
+        <property name="description" value="IHE ITI-43 Transaction"/>
+    </bean>
+    <bean id="transactionIti44" class="net.sandlotnow.interop.ihe.model.EdgeTransaction">
+        <property name="id" value="103"/>
+        <property name="name" value="ITI-44"/>
+        <property name="description" value="IHE ITI-44 Transaction"/>
+    </bean>
+    <bean id="transactionIti45" class="net.sandlotnow.interop.ihe.model.EdgeTransaction">
+        <property name="id" value="104"/>
+        <property name="name" value="ITI-45"/>
+        <property name="description" value="IHE ITI-45 Transaction"/>
+    </bean>
+    <bean id="transactionIti47" class="net.sandlotnow.interop.ihe.model.EdgeTransaction">
+        <property name="id" value="105"/>
+        <property name="name" value="ITI-47"/>
+        <property name="description" value="IHE ITI-47 Transaction"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://camel.apache.org/schema/spring"   
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://cxf.apache.org/jaxrs
+http://cxf.apache.org/schemas/jaxrs.xsd">
+
+
+    
+    <!-- JAX RS Services for audits management-->
+    <jaxrs:server id="auditService"
+      serviceClass="net.sandlotnow.interop.audit.InteropAuditServiceRest"
+      address="/audits"/> 
+            
+    <!-- JAX RS Services for edge system management-->
+    <jaxrs:server id="adminService" address="/admin">
+      <jaxrs:serviceBeans>
+           <ref bean="interopConfigServiceBean"/>
+      </jaxrs:serviceBeans>
+      <jaxrs:providers> 
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider">
+                <property name="mapper">
+                    <bean class="net.sandlotnow.interop.configuration.json.HibernateAwareObjectMapper"/>
+                </property>
+            </bean> 
+      </jaxrs:providers> 
+    </jaxrs:server> 
+
+    <!-- Configuration service setup -->
+    
+    <bean id="interopConfigServiceBean" class="net.sandlotnow.interop.configuration.service.InteropConfigurationServiceImpl"/>
+    
+    <bean id="configParser"
+        class="net.sandlotnow.interop.configuration.SpringConfigurationParser">
+        <property name="springContextConfigFilePath" value="context.xml"/>
+    </bean>
+
+</beans>

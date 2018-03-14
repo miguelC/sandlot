@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:ldap="http://www.springframework.org/schema/ldap"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap.xsd">
+       
+    <!-- 
+    <ldap:context-source
+        username="cn=admin"
+        base="dc=sandlotnow,dc=com"
+        password="sandlot1!"
+        url="ldap://localhost:389" >
+    </ldap:context-source>
+    
+   <ldap:ldap-template id="ldapTemplate" /> 
+   -->
+   
+   <!--  LDAP Configuration for Dev LDAP Server -->
+   <ldap:context-source
+        id="ldapContextDev"
+        username="dev\ldapserviceaccount"
+        base="cn=Users,dc=dev,dc=sandlot,dc=local"
+        password="r@ti0nalE"
+        url="ldap://172.16.101.88:389" 
+        referral="follow">
+    </ldap:context-source>
+   <ldap:ldap-template id="ldapTemplateDev" context-source-ref="ldapContextDev"/>
+   
+   <bean id="ldapServerDev" class="com.sandlotsolutions.IdentityProvider.Model.LDAPServerConfiguration">
+      <property name="ldapTemplate" ref="ldapTemplateDev" />
+      <property name="userIdEntryName" value="sAMAccountName"/>
+   </bean>
+   
+   <!--  LDAP Configuration for QA LDAP Server -->
+   <ldap:context-source
+        id="ldapContextQA"
+        username="qa\ldapserviceaccount"
+        base="cn=Users,dc=qa,dc=sandlot,dc=local"
+        password="r@ti0nalE"
+        url="ldap://172.16.101.88:389" >
+    </ldap:context-source>
+   <ldap:ldap-template id="ldapTemplateQA" context-source-ref="ldapContextQA"/>
+   
+   <bean id="ldapServerQA" class="com.sandlotsolutions.IdentityProvider.Model.LDAPServerConfiguration">
+      <property name="ldapTemplate" ref="ldapTemplateQA" />
+      <property name="userIdEntryName" value="sAMAccountName"/>
+   </bean>
+   
+   <!--  Connection Manager references all LDAP Server Configurations -->
+   <bean id="ldapConnectionManager" class="com.sandlotsolutions.IdentityProvider.Model.LDAPConnectionManager">
+      <property name="ldapConnections">
+        <map>
+            <entry key ="DEV" value-ref="ldapServerDev"/>
+            <entry key ="QA" value-ref="ldapServerQA"/>
+        </map>
+    </property>
+   </bean>
+   
+</beans>

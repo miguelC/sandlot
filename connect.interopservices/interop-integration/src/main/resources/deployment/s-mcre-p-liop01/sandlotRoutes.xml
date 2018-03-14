@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"  
+       xmlns:cxf="http://camel.apache.org/schema/cxf"     
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core-2.5.xsd
+http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+
+<!-- sandlotRoutes for mcctest.sandlotnow.net  -->
+
+    <!-- this is an included XML file where we only the the routeContext -->
+    <routeContext id="sandlotRoutes" xmlns="http://camel.apache.org/schema/spring">
+        
+        <camel:route id="routeIti41Pxs001">
+          <camel:from uri="direct:iti41RoutePxs001"/> 
+          <camel:process ref="iti41ProcessorPXS001" id="iti41ProcessorPXS001"/>
+       </camel:route>
+
+        <camel:route id="routeIti18Pxs001">
+          <camel:from uri="direct:iti18RoutePxs001"/> 
+          <camel:to uri="direct:epicStoredQueryTransformer"/>
+          <camel:process ref="iti18ProcessorPXS001" id="iti18ProcessorPXS001"/>
+       </camel:route>
+
+        <camel:route id="routeIti43Pxs001">
+          <camel:from uri="direct:iti43RoutePxs001"/> 
+          <camel:process ref="iti43ProcessorPXS001" id="iti43ProcessorPXS001"/>
+       </camel:route>
+
+        <camel:route id="routeIti43Pxs001Static">
+          <camel:from uri="direct:iti43RoutePxs001Static"/> 
+          <camel:process ref="iti43ProcessorPXS001Static" id="iti43ProcessorPXS001Static"/>
+       </camel:route>
+
+        <camel:route id="routeIti45MPI001">
+          <camel:from uri="direct:iti45RouteMPI001"/> 
+          <camel:process ref="iti45ProcessorMPI001" id="iti45ProcessorMPI001"/>
+       </camel:route>
+
+       <camel:route id="routeIti47MPI001Epic">
+          <camel:from uri="direct:iti47MPI001Epic"/> 
+          <camel:to uri="direct:epicPdqTransformer"/>
+          <camel:process ref="iti47ProcessorMPI001" id="iti47ProcessorMPI001Epic"/>      
+       </camel:route>
+       
+       <camel:route id="routeIti47MPI001EpicPixFeed">
+          <camel:from uri="direct:iti47RouteIti44PixFeedMPI001Epic"/> 
+          <camel:process ref="iti47ProcessorIti44MPI001" id="iti47ProcessorIti44MPI001Epic"/>       
+       </camel:route>
+       
+       <camel:route id="routeIti47Mcc">
+          <camel:from uri="direct:mccIti47Route"/> 
+          <camel:multicast stopOnException="false" parallelProcessing="true">
+              <to uri="direct:iti47RouteIti44PixFeedMPI001Epic"/>
+              <to uri="direct:iti47MPI001Epic"/>
+          </camel:multicast>          
+       </camel:route>
+        
+       <camel:route id="routeIti41Mcc">
+          <camel:from uri="direct:mccIti41Route"/> 
+          <camel:to uri="direct:epicPnrTransformer"/>
+          <camel:process ref="iti41ProcessorIti45MPI001" id="iti41ProcessorIti45MPI001"/>
+          <camel:process ref="iti41ProcessorPXS001" id="iti41ProcessorIti45PXS001"/>
+       </camel:route>
+       
+    </routeContext>
+        
+    <!-- HL7 Beans -->
+    
+    <!-- Custom Routes -->
+    
+    <bean id="routeEpicPdqTransformer"
+        class="net.sandlotnow.interop.integration.route.custom.EpicPdqTransformerRouteBuilder">
+        <property name="endpointName" value="epicPdqTransformer"/>
+    </bean>
+    
+    <bean id="routeEpicPnrTransformer"
+        class="net.sandlotnow.interop.integration.route.custom.EpicPnrTransformerRouteBuilder">
+        <property name="endpointName" value="epicPnrTransformer"/>
+        <property name="documentSourcesMap">
+            <map>
+                <entry key="1.2.840.114350.1.13.60.2.7.2.688879" value="1.2.840.114350.1.13.60.3.7.3.688884.100.5.2.5"/>
+            </map>
+        </property>
+    </bean>
+    
+    <bean id="routeEpicStoredQueryTransformer"
+        class="net.sandlotnow.interop.integration.route.custom.EpicStoredQueryTransformerRouteBuilder">
+        <property name="endpointName" value="epicStoredQueryTransformer"/>
+    </bean>
+    
+    <!-- Processors -->
+    <bean id="iti18Processor" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti18">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti41Processor" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti41">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti43Processor" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti43">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti44Processor" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti44">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti45Processor" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti45">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti47Processor" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti47">
+        <property name="producer" ref="template"/>
+    </bean>
+    
+    <!-- Custom Processor -->
+    
+    <bean id="iti41ProcessorIti45MPI001" class="net.sandlotnow.interop.integration.processor.ihe.Iti41PatientIdentityResolverIti45Processor">
+        <property name="iti45Processor" ref="iti45ProcessorMPI001"/>
+    </bean>
+    
+    <bean id="iti44ProcessorMPI001" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti44">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="2.16.840.1.113883.3.37.4.1.1.2.1.1"/>
+    </bean>
+    
+    <bean id="iti45ProcessorMPI001" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti45">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="2.16.840.1.113883.3.37.4.1.1.2.1.1"/>
+    </bean>
+    
+    <bean id="iti47ProcessorMPI001" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti47">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="2.16.840.1.113883.3.37.4.1.1.2.1.1"/>
+    </bean>
+    
+    <bean id="iti41ProcessorPXS001" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti41">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="1.3.6.1.4.1.38630.2.1.1.99.2.6"/>
+    </bean>
+    
+    <bean id="iti18ProcessorPXS001" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti18">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="1.3.6.1.4.1.38630.2.1.1.99.2.6"/>
+    </bean>
+    
+    <bean id="iti43ProcessorPXS001" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti43">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="1.3.6.1.4.1.38630.2.1.1.99.2.6"/>
+    </bean>
+    
+    <bean id="iti43ProcessorPXS001Static" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti43">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="1.2.840.113619.20.2.2.1"/>
+    </bean>
+        
+    <bean id="iti47ProcessorIti44MPI001" class="net.sandlotnow.interop.integration.processor.ihe.Iti47PatientIdentityFeederIti44Processor">
+        <property name="iti44Processor" ref="iti44ProcessorMPI001"/>
+        <property name="iti45Processor" ref="iti45ProcessorMPI001"/>
+    </bean>
+    <!-- Error Handlers -->
+    
+    
+</beans>

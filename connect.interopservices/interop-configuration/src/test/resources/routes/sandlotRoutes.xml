@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"  
+       xmlns:cxf="http://camel.apache.org/schema/cxf"     
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core-2.5.xsd
+http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+    <!-- this is an included XML file where we only the the routeContext -->
+    <routeContext id="sandlotRoutes" xmlns="http://camel.apache.org/schema/spring">
+        
+        <camel:route id="routeParseConfig">
+          <camel:from uri="direct:parseConfig"/>
+          <camel:bean ref="configParser" method="parseXmlToJson" />
+        </camel:route>  
+        
+    </routeContext>
+        
+    <!-- Configuration service setup -->
+    
+    <bean id="configParser"
+        class="net.sandlotnow.interop.configuration.SpringConfigurationParser">
+        <property name="springContextConfigFilePath" value="context.xml"/>
+    </bean>
+    
+    
+</beans>

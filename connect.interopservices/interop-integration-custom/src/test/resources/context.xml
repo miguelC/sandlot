@@ -1,0 +1,79 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"  
+       xmlns:p="http://www.springframework.org/schema/p"   
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"  
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xmlns:sec="http://cxf.apache.org/configuration/security"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd
+http://cxf.apache.org/transports/http/configuration
+http://cxf.apache.org/schemas/configuration/http-conf.xsd
+http://cxf.apache.org/configuration/security
+http://cxf.apache.org/schemas/configuration/security.xsd
+http://cxf.apache.org/jaxrs
+http://cxf.apache.org/schemas/jaxrs.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core-2.5.xsd">
+    
+    
+    <!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+    <context:annotation-config />    
+    
+    <camel:camelContext id="camelContext">
+        <camel:package>net.sandlotnow.interop.integration.custom</camel:package>
+        <camel:jmxAgent id="agent" disabled="true" />  
+        <camel:template id="template"/>
+        <camel:dataFormats>
+            <camel:jaxb id="ebxmlJaxb" contextPath="org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30"/>
+        </camel:dataFormats> 
+    </camel:camelContext>
+
+	<ipf:globalContext id="globalContext"/>
+        
+    <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans -->
+    <context:component-scan base-package="net.sandlotnow.interop.ihe.data" />
+    
+    
+    <!-- IHE Data source configuration -->
+    
+    <tx:annotation-driven transaction-manager="transactionManagerIhe" />
+    
+    <bean id="iheDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/interopihe"/>
+        <property name="username" value="interopsvc"/>
+        <property name="password" value="Sandlot1!"/>
+    </bean>
+
+    <bean id="entityManagerFactoryIhe"
+            class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+            p:packagesToScan="net.sandlotnow.interop.ihe"
+            p:dataSource-ref="iheDataSource"
+            >
+        <property name="persistenceUnitName" value="sandlotIhePersistence" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="true" />
+                <property name="showSql" value="true" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="transactionManagerIhe" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactoryIhe" />
+    </bean>
+
+</beans>

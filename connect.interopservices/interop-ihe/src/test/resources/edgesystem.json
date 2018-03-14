@@ -1,0 +1,361 @@
+[
+  {
+    "id": 2,
+    "version": 0,
+    "name": "Epic Multicare Health System",
+    "assigningAuthorityOID": "1.2.840.114350.1.13.60.3.7.3.688884.100",
+    "documentSourceOID": "1.2.840.114350.1.13.60.3.7.3.688884.100",
+    "endpoints": [
+      {
+        "id": 1,
+        "version": 0,
+        "camelEndpointName": "direct:mccIti41Route",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 101,
+          "version": 0,
+          "name": "ITI-41",
+          "description": "IHE ITI-41 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 2,
+        "version": 0,
+        "camelEndpointName": "direct:mccIti47Route",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 105,
+          "version": 0,
+          "name": "ITI-47",
+          "description": "IHE ITI-47 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 3,
+        "version": 0,
+        "camelEndpointName": "direct:iti18RoutePxs001",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 100,
+          "version": 0,
+          "name": "ITI-18",
+          "description": "IHE ITI-18 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 4,
+        "version": 0,
+        "camelEndpointName": "direct:iti45RouteMPI001",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 104,
+          "version": 0,
+          "name": "ITI-45",
+          "description": "IHE ITI-45 Transaction"
+        },
+        "edgeSystem": null
+      }
+    ],
+    "devices": [
+      {
+        "id": 1,
+        "version": 0,
+        "name": "PIX/PDQ v3 Sender Device (Epic Multicare)",
+        "deviceOID": "1.2.840.114350.1.13.60.3.7.2.688879",
+        "deviceType": "PIXPDQDEVICE",
+        "edgeSystem": null
+      }
+    ],
+    "organization": {
+      "id": 3,
+      "version": 0,
+      "name": "Multicare Epic Organization",
+      "shortName": "MulticareEpic",
+      "organizationOID": "1.2.840.114350.1.13.60.3.7.3.688884",
+      "edgeSystems": null
+    }
+  },
+  {
+    "id": 3,
+    "version": 0,
+    "name": "GE Multicare Test System (Bonnie Lake)",
+    "assigningAuthorityOID": "2.16.840.1.113883.3.6184.205.205.5.1.1.2",
+    "documentSourceOID": "2.16.840.1.113883.3.6184.205.205.5.5.2.5",
+    "endpoints": [
+      {
+        "id": 5,
+        "version": 0,
+        "camelEndpointName": "direct:iti18RoutePxs001",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 100,
+          "version": 0,
+          "name": "ITI-18",
+          "description": "IHE ITI-18 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 6,
+        "version": 0,
+        "camelEndpointName": "direct:iti41RoutePxs001",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 101,
+          "version": 0,
+          "name": "ITI-41",
+          "description": "IHE ITI-41 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 7,
+        "version": 0,
+        "camelEndpointName": "direct:iti45RouteMPI001",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 104,
+          "version": 0,
+          "name": "ITI-45",
+          "description": "IHE ITI-45 Transaction"
+        },
+        "edgeSystem": null
+      }
+    ],
+    "devices": [],
+    "organization": {
+      "id": 4,
+      "version": 0,
+      "name": "Multicare GE Test Organization (Bonnie Lake)",
+      "shortName": "MulticareGEBonnieLake",
+      "organizationOID": "2.16.840.1.113883.3.6184.205.205.5",
+      "edgeSystems": null
+    }
+  },
+  {
+    "id": 4,
+    "version": 0,
+    "name": "GE Multicare Test System (Woodcreek)",
+    "assigningAuthorityOID": "2.16.840.1.113883.3.6184.205.205.1.1.1.2",
+    "documentSourceOID": "2.16.840.1.113883.3.6184.205.205.1.5.2.5",
+    "endpoints": [
+      {
+        "id": 8,
+        "version": 0,
+        "camelEndpointName": "direct:iti18RoutePxs001",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 100,
+          "version": 0,
+          "name": "ITI-18",
+          "description": "IHE ITI-18 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 9,
+        "version": 0,
+        "camelEndpointName": "direct:iti41RoutePxs001",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 101,
+          "version": 0,
+          "name": "ITI-41",
+          "description": "IHE ITI-41 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 10,
+        "version": 0,
+        "camelEndpointName": "direct:iti45RouteMPI001",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 104,
+          "version": 0,
+          "name": "ITI-45",
+          "description": "IHE ITI-45 Transaction"
+        },
+        "edgeSystem": null
+      }
+    ],
+    "devices": [],
+    "organization": {
+      "id": 5,
+      "version": 0,
+      "name": "Multicare GE Test Organization (Woodcreek)",
+      "shortName": "MulticareGEWoodcreek",
+      "organizationOID": "2.16.840.1.113883.3.6184.205.205.1",
+      "edgeSystems": null
+    }
+  },
+  {
+    "id": 5,
+    "version": 0,
+    "name": "Multicare Sandlot MPI + PXS System",
+    "assigningAuthorityOID": "2.16.840.1.113883.3.37.4.1.1.2.1.1",
+    "documentSourceOID": "1.3.6.1.4.1.38630.2.1.1.99.2.6",
+    "endpoints": [
+      {
+        "id": 11,
+        "version": 0,
+        "camelEndpointName": "pixv3-iti45://mcctest.sandlotnow.net/mpi/ws-secure/iti45Service?secure=true",
+        "actor": "RECEIVER",
+        "transaction": {
+          "id": 104,
+          "version": 0,
+          "name": "ITI-45",
+          "description": "IHE ITI-45 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 12,
+        "version": 0,
+        "camelEndpointName": "pdqv3-iti47://mcctest.sandlotnow.net/mpi/ws-secure/iti47Service?secure=true",
+        "actor": "RECEIVER",
+        "transaction": {
+          "id": 105,
+          "version": 0,
+          "name": "ITI-47",
+          "description": "IHE ITI-47 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 13,
+        "version": 0,
+        "camelEndpointName": "xds-iti18://mcctest.sandlotnow.net/sandlotconnect/webservices/rev6/xdsb-storedquery?secure=true",
+        "actor": "RECEIVER",
+        "transaction": {
+          "id": 100,
+          "version": 0,
+          "name": "ITI-18",
+          "description": "IHE ITI-18 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 14,
+        "version": 0,
+        "camelEndpointName": "xds-iti41://mcctest.sandlotnow.net/sandlotconnect/webservices/rev6/xdsb-provideandregister?secure=true",
+        "actor": "RECEIVER",
+        "transaction": {
+          "id": 101,
+          "version": 0,
+          "name": "ITI-41",
+          "description": "IHE ITI-41 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 15,
+        "version": 0,
+        "camelEndpointName": "xds-iti43://mcctest.sandlotnow.net/sandlotconnect/webservices/xdsb/ondemanddocumentsource/iti43-retrievedocumentset?secure=true",
+        "actor": "RECEIVER",
+        "transaction": {
+          "id": 102,
+          "version": 0,
+          "name": "ITI-43",
+          "description": "IHE ITI-43 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 16,
+        "version": 0,
+        "camelEndpointName": "direct:iti18RoutePxs001",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 100,
+          "version": 0,
+          "name": "ITI-18",
+          "description": "IHE ITI-18 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 17,
+        "version": 0,
+        "camelEndpointName": "pixv3-iti44://mcctest.sandlotnow.net/mpi/ws-secure/iti44Service?secure=true",
+        "actor": "RECEIVER",
+        "transaction": {
+          "id": 103,
+          "version": 0,
+          "name": "ITI-44",
+          "description": "IHE ITI-44 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 18,
+        "version": 0,
+        "camelEndpointName": "direct:iti43RoutePxs001",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 102,
+          "version": 0,
+          "name": "ITI-43",
+          "description": "IHE ITI-43 Transaction"
+        },
+        "edgeSystem": null
+      }
+    ],
+    "devices": [],
+    "organization": {
+      "id": 6,
+      "version": 0,
+      "name": "Multicare Sandlot MPI + PXS System",
+      "shortName": "MulticareSandlotMPIPXS",
+      "organizationOID": "2.16.840.1.113883.3.3281.100.400",
+      "edgeSystems": null
+    }
+  },
+  {
+    "id": 6,
+    "version": 0,
+    "name": "Multicare Sandlot PXS Static Document Reg/Repo",
+    "assigningAuthorityOID": "1.2.840.113619.20.2.1.1.2",
+    "documentSourceOID": "1.2.840.113619.20.2.2.1",
+    "endpoints": [
+      {
+        "id": 19,
+        "version": 0,
+        "camelEndpointName": "direct:iti43RoutePxs001",
+        "actor": "SENDER",
+        "transaction": {
+          "id": 102,
+          "version": 0,
+          "name": "ITI-43",
+          "description": "IHE ITI-43 Transaction"
+        },
+        "edgeSystem": null
+      },
+      {
+        "id": 20,
+        "version": 0,
+        "camelEndpointName": "xds-iti43://mcctest.sandlotnow.net/sandlotconnect/webservices/xdsb-retrievedocuments?secure=true",
+        "actor": "RECEIVER",
+        "transaction": {
+          "id": 102,
+          "version": 0,
+          "name": "ITI-43",
+          "description": "IHE ITI-43 Transaction"
+        },
+        "edgeSystem": null
+      }
+    ],
+    "devices": [],
+    "organization": {
+      "id": 6,
+      "version": 0,
+      "name": "Multicare Sandlot MPI + PXS System",
+      "shortName": "MulticareSandlotMPIPXS",
+      "organizationOID": "2.16.840.1.113883.3.3281.100.400",
+      "edgeSystems": null
+    }
+  }
+]

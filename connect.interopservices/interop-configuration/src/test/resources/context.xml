@@ -1,0 +1,64 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://camel.apache.org/schema/spring" 
+       xmlns:p="http://www.springframework.org/schema/p"   
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"  
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+    
+	<!-- import the routes from another XML file -->
+	<import resource="routes/sandlotRoutes.xml"/>
+	
+    <camel:camelContext id="camelContext">
+        <camel:jmxAgent id="agent" disabled="true" />  
+        <camel:routeContextRef ref="sandlotRoutes"/>   
+    </camel:camelContext>
+    
+    <tx:annotation-driven transaction-manager="transactionManagerIhe" />
+    <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans -->
+    <context:component-scan base-package="net.sandlotnow.interop.ihe" />
+    <!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+    <context:annotation-config />
+    
+    <!-- IHE Data source configuration -->
+    
+    <bean id="iheDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/interopihe"/>
+        <property name="username" value="interopsvc"/>
+        <property name="password" value="Sandlot1!"/>
+    </bean>
+
+    <bean id="entityManagerFactoryIhe"
+            class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+            p:packagesToScan="net.sandlotnow.interop.ihe"
+            p:dataSource-ref="iheDataSource"
+            >
+        <property name="persistenceUnitName" value="sandlotIhePersistence" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="true" />
+                <property name="showSql" value="true" />
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="transactionManagerIhe" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactoryIhe" />
+    </bean>
+
+</beans>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"  
+       xmlns:cxf="http://camel.apache.org/schema/cxf"     
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core-2.5.xsd
+http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+
+<!-- sandlotRoutes for mcctest.sandlotnow.net  -->
+
+    <!-- this is an included XML file where we only the the routeContext -->
+    <routeContext id="sandlotRoutes" xmlns="http://camel.apache.org/schema/spring">
+        
+        <camel:route id="routeIti41Pxs001">
+          <camel:from uri="direct:iti41RoutePxs001"/> 
+          <camel:process ref="iti41ProcessorPXS001" id="iti41ProcessorPXS001"/>
+       </camel:route>
+
+        <camel:route id="routeIti18Pxs001">
+          <camel:from uri="direct:iti18RoutePxs001"/> 
+          <camel:process ref="iti18ProcessorPXS001" id="iti18ProcessorPXS001"/>
+       </camel:route>
+
+        <camel:route id="routeIti43Pxs001">
+          <camel:from uri="direct:iti43RoutePxs001"/> 
+          <camel:process ref="iti43ProcessorPXS001" id="iti43ProcessorPXS001"/>
+       </camel:route>
+
+        <camel:route id="routeIti43Pxs001Static">
+          <camel:from uri="direct:iti43RoutePxs001Static"/> 
+          <camel:process ref="iti43ProcessorPXS001Static" id="iti43ProcessorPXS001Static"/>
+       </camel:route>
+
+        <camel:route id="routeIti45MPI001">
+          <camel:from uri="direct:iti45RouteMPI001"/> 
+          <camel:process ref="iti45ProcessorMPI001" id="iti45ProcessorMPI001"/>
+       </camel:route>
+       
+    </routeContext>
+        
+    <!-- HL7 Beans -->
+    
+    <!-- Custom Routes -->
+    
+    
+    <!-- Processors -->
+    <bean id="iti18Processor" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti18">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti41Processor" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti41">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti43Processor" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti43">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti44Processor" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti44">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti45Processor" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti45">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti47Processor" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti47">
+        <property name="producer" ref="template"/>
+    </bean>
+    
+    <!-- Custom Processor -->
+    
+    <bean id="iti45ProcessorMPI001" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti45">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="2.16.840.1.113883.3.5737.1.9.99.2.1.1.2"/>
+    </bean>
+    
+    <bean id="iti41ProcessorPXS001" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti41">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="1.3.6.1.4.1.38630.2.1.1.99.2.6"/>
+    </bean>
+    
+    <bean id="iti18ProcessorPXS001" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti18">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="1.3.6.1.4.1.38630.2.1.1.99.2.6"/>
+    </bean>
+    
+    <bean id="iti43ProcessorPXS001" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti43">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="1.3.6.1.4.1.38630.2.1.1.99.2.6"/>
+    </bean>
+    
+    <bean id="iti43ProcessorPXS001Static" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti43">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="1.3.6.1.4.1.38630.2.1.1.99.2.5"/>
+    </bean>
+    
+    <!-- Error Handlers -->
+    
+    
+</beans>

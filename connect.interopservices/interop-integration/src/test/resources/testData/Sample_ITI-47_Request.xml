@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PRPA_IN201305UV02 ITSVersion="XML_1.0"
+    xmlns="urn:hl7-org:v3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <id root="2.16.840.1.113883.3.5022.4.100.10.1" extension="13503"/>
+    <creationTime value="20120622093537-0400"/>
+    <versionCode code="V3PR1"/>
+    <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201305UV02"/>
+    <processingCode code="P"/>
+    <processingModeCode code="T"/>
+    <acceptAckCode code="AL"/>
+    <receiver typeCode="RCV">
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id root="2.16.840.1.113883.3.441.1" extension="50"/>
+        </device>
+    </receiver>
+    <sender typeCode="SND">
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id root="2.16.840.1.113883.3.5022.4.100.20.1"/>
+        </device>
+    </sender>
+    <controlActProcess classCode="CACT" moodCode="EVN">
+        <queryByParameter>
+            <queryId root="25419680-bc6f-11e1-a000-2004453d0419"/>
+            <statusCode code="new"/>
+            <responseModalityCode code="R"/>
+            <responsePriorityCode code="I"/>
+            <initialQuantity value="2"/>
+            <parameterList>
+                <livingSubjectAdministrativeGender>
+                    <value code="M"/>
+                    <semanticsText>LivingSubject.administrativeGender</semanticsText>
+                </livingSubjectAdministrativeGender>
+                <livingSubjectBirthTime>
+                    <value value="19640212"/>
+                    <semanticsText>LivingSubject.birthTime</semanticsText>
+                </livingSubjectBirthTime>
+                <livingSubjectId>
+                    <value root="2.16.840.1.113883.4.1" extension="999019108"/>
+                    <semanticsText>LivingSubject.id</semanticsText>
+                </livingSubjectId>
+                <livingSubjectId>
+                    <value root="2.16.840.1.113883.3.5022.4.100.1.1.2" extension="RGMyersTest001"/>
+                    <semanticsText>LivingSubject.id</semanticsText>
+                </livingSubjectId>
+                <livingSubjectName>
+                    <value>
+                        <given>Robert</given>
+                        <given>Gaylord</given>
+                        <family>Myers</family>
+                    </value>
+                    <semanticsText>LivingSubject.name</semanticsText>
+                </livingSubjectName>
+                <patientAddress>
+                    <value>
+                        <streetAddressLine>1974 Killer Drive</streetAddressLine>
+                        <city>MANHEIM</city>
+                        <state>PA</state>
+                        <postalCode>17545</postalCode>
+                        <country>US</country>
+                    </value>
+                    <semanticsText>Patient.addr</semanticsText>
+                </patientAddress>
+            </parameterList>
+        </queryByParameter>
+    </controlActProcess>
+</PRPA_IN201305UV02>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:RegistryResponse status="urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Failure" xmlns:ns2="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0" xmlns:ns4="urn:ihe:iti:xds-b:2007" xmlns:ns3="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0" xmlns:ns9="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" xmlns:ns5="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0" xmlns:ns6="urn:ihe:rad:xdsi-b:2009" xmlns:ns10="urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1" xmlns:ns7="urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1" xmlns:ns8="urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1">
+    <ns2:RegistryErrorList highestSeverity="urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error">
+        <ns2:RegistryError codeContext="Violation of UNIQUE KEY constraint 'UQ__T_Regist__550857E44CE1F132'. Cannot insert duplicate key in object 'DOCREG.T_RegistryEntry'. The duplicate key value is (urn:uuid:ef65a14a-f9ea-480e-bf5c-2e55db447e0e)." errorCode="XDSRepositoryError" severity="urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error"></ns2:RegistryError>
+    </ns2:RegistryErrorList>
+</ns2:RegistryResponse>

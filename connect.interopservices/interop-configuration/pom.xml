@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Generated from archetype; please customize.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>net.sandlotnow.interop</groupId>
+    <artifactId>interop-configuration</artifactId>
+    <name>interop-configuration</name>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <!-- libraries -->
+        <java-version>1.7</java-version>
+        <spring-version>3.0.1</spring-version>
+        <camel-version>2.15.0</camel-version>
+        <groovy-version>2.3.10</groovy-version>
+        <derby-version>10.9.1.0</derby-version>
+        <logback-version>1.1.3</logback-version>
+        <jackson-databind-version>2.6.3</jackson-databind-version>
+
+        <!-- plugins -->
+        <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
+        <eclipse-plugin-version>2.8</eclipse-plugin-version>
+        <compiler-plugin-version>3.0</compiler-plugin-version>
+        <groovy-eclipse-compiler-version>2.9.2-01</groovy-eclipse-compiler-version>
+        <groovy-eclipse-batch-version>2.4.3-01</groovy-eclipse-batch-version>
+        <gmaven-provider-version>2.0</gmaven-provider-version>
+        <gmaven-version>1.4</gmaven-version>
+        <maven-war-plugin-version>2.6</maven-war-plugin-version>
+        <lombok-version>0.11.4</lombok-version>
+        
+        <!-- Sandlot projects -->
+        <interop-ihe-version>1.0-SNAPSHOT</interop-ihe-version>
+        
+    </properties>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-spring</artifactId>
+                <version>${camel-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <dependencies>
+                
+        <!-- Sandlot projects -->
+        <dependency>
+            <groupId>net.sandlotnow.interop</groupId>
+            <artifactId>interop-ihe</artifactId>
+            <version>${interop-ihe-version}</version>
+            <scope>compile</scope>
+        </dependency>
+        
+        <!-- dependencies for production -->
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-groovy</artifactId>
+            </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-sql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-cxf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jackson</artifactId>
+        </dependency>
+     
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind-version}</version>
+        </dependency>
+        <dependency>
+          <groupId>com.fasterxml.jackson.datatype</groupId>
+          <artifactId>jackson-datatype-hibernate4</artifactId>
+          <version>${jackson-databind-version}</version>
+        </dependency> 
+           
+        <!-- dependencies for test -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <!-- LogBack dependencies --> 
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback-version}</version>
+        </dependency>
+        <!-- <dependency>                                    
+            <groupId>org.slf4j</groupId>                
+            <artifactId>jcl-over-slf4j</artifactId>   
+        </dependency>
+        <dependency> 
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>-->
+        <!-- Groovy dependencies -->
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>${groovy-version}</version>
+        </dependency>
+        
+    </dependencies>
+
+     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${assembly-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler-plugin-version}</version>
+                    <configuration>
+                        <compilerId>groovy-eclipse-compiler</compilerId>
+                        <source>${java-version}</source>
+                        <target>${java-version}</target>
+                        <fork>true</fork>
+                        <verbose>false</verbose>
+                        <compilerArguments>
+                            <javaAgentClass>lombok.core.Agent</javaAgentClass>
+                        </compilerArguments>
+                        <includes> 
+                                <include>**/*.groovy</include> 
+                                <include>**/*.java</include> 
+                        </includes> 
+                        <testIncludes> 
+                                <testInclude>**/*.groovy</testInclude> 
+                        </testIncludes> 
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-eclipse-compiler</artifactId>
+                            <version>${groovy-eclipse-compiler-version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-eclipse-batch</artifactId>
+                            <version>${groovy-eclipse-batch-version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok-version}</version>
+                        </dependency>                   
+                    </dependencies>             
+                </plugin>                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-eclipse-plugin</artifactId>
+                    <version>${eclipse-plugin-version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <!-- This seems to be the only way to add the .groovy source files -->
+                <!-- in src/main/groovy to the Eclipse build path. -->
+                <!-- The source files have to be excluded binaries explicitly (see maven-jar-plugin config). -->
+                <directory>src/main/groovy</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/bin.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+            <!-- The Groovy compiler at build time -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <configuration>
+                    <projectnatures>
+                        <projectnature>org.eclipse.jdt.core.javanature</projectnature>
+                        <projectnature>org.eclipse.jdt.groovy.core.groovyNature</projectnature>
+                    </projectnatures>
+                    <downloadSources>true</downloadSources>
+                    <ajdtVersion>none</ajdtVersion>
+                    <classpathContainers>
+                        <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+                        <!-- Add explicitly the groovy libs. Groovy nature alone seems not to be enough. -->
+                        <classpathContainer>GROOVY_SUPPORT</classpathContainer>
+                    </classpathContainers>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-eclipse-compiler</artifactId>
+                <version>${groovy-eclipse-compiler-version}</version>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>codehaus</id>
+            <name>Codehaus Maven Repository</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+        <repository>
+            <id>java.net</id>
+            <name>java.net Maven Repository</name>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+    </repositories>
+
+</project>

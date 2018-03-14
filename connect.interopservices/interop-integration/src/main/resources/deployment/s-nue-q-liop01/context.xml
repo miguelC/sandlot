@@ -1,0 +1,154 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"  
+       xmlns:p="http://www.springframework.org/schema/p"   
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"  
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xmlns:sec="http://cxf.apache.org/configuration/security"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx.xsd
+http://cxf.apache.org/transports/http/configuration
+http://cxf.apache.org/schemas/configuration/http-conf.xsd
+http://cxf.apache.org/configuration/security
+http://cxf.apache.org/schemas/configuration/security.xsd
+http://cxf.apache.org/jaxrs
+http://cxf.apache.org/schemas/jaxrs.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core-2.5.xsd">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+    
+	<!-- import the routes from another XML file -->
+	<import resource="routes/sandlotRoutes.xml"/>
+    <import resource="routes/itiServicesRoutes.xml"/>
+    
+    <!-- Import http CFX security configuration and api services config-->
+    <import resource="context-security.xml"/>	
+    <import resource="apiServices.xml"/>
+    
+    <!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+    <context:annotation-config />    
+    
+    <camel:camelContext id="camelContext">
+        <!-- <camel:package>net.sandlotnow.interop.integration.route.custom</camel:package> -->
+        <camel:jmxAgent id="agent" disabled="true" />  
+        <camel:template id="template"/> 
+        <camel:routeContextRef ref="sandlotRoutes"/>  
+        <camel:routeContextRef ref="itiServicesRoutes"/> 
+        <camel:dataFormats>
+            <camel:jaxb id="ebxmlJaxb" contextPath="org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30"/>
+        </camel:dataFormats> 
+    </camel:camelContext>
+
+	<ipf:globalContext id="globalContext"/>
+        
+    <!-- Scans the classpath for annotated components that will be auto-registered as Spring beans -->
+    <context:component-scan base-package="net.sandlotnow.interop.configuration" />
+    <context:component-scan base-package="net.sandlotnow.interop.configuration.service" />
+    <context:component-scan base-package="net.sandlotnow.interop.integration.audit" />
+    <context:component-scan base-package="net.sandlotnow.interop.audit" />
+    <context:component-scan base-package="net.sandlotnow.interop.ihe.data" />
+    
+    <!--  Message serializers -->
+    <bean id="auditSerializerMap" class="net.sandlotnow.interop.audit.InteropAuditSerializerMap">
+        <property name="defaultMessageSerializer">
+            <bean class="net.sandlotnow.interop.integration.serialization.StringMessageSerializer"/>
+        </property>
+        <property name="messageSerializers">
+            <map>
+                <entry key="org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest">
+                    <bean class="net.sandlotnow.interop.integration.serialization.AdhocQueryRequestSerializer"/>
+                </entry>
+                <entry key="org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse">
+                    <bean class="net.sandlotnow.interop.integration.serialization.AdhocQueryResponseSerializer"/>
+                </entry>
+                <entry key="org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType">
+                    <bean class="net.sandlotnow.interop.integration.serialization.ProvideAndRegisterDocumentSetRequestSerializer"/>
+                </entry>
+                <entry key="org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet">
+                    <bean class="net.sandlotnow.interop.integration.serialization.ProvideAndRegisterDocumentSetSerializer"/>
+                </entry>
+                <entry key="org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType">
+                    <bean class="net.sandlotnow.interop.integration.serialization.RegistryResponseSerializer"/>
+                </entry>
+                <entry key="org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType">
+                    <bean class="net.sandlotnow.interop.integration.serialization.RetrieveDocumentSetRequestTypeSerializer"/>
+                </entry>
+                <entry key="org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType">
+                    <bean class="net.sandlotnow.interop.integration.serialization.RetrieveDocumentSetResponseTypeSerializer"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+            
+    <!-- Audits data source configuration -->    
+    
+    <tx:annotation-driven transaction-manager="transactionManagerAudit" />
+    
+    <bean id="auditDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://172.16.244.32:5432/interopaudits"/>
+        <property name="username" value="interopsvc"/>
+        <property name="password" value="Sandlot1!"/>
+    </bean>
+
+    <bean id="entityManagerFactoryAudit"
+            class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+            p:packagesToScan="net.sandlotnow.interop.audit"
+            p:dataSource-ref="auditDataSource"
+            >
+        <property name="persistenceUnitName" value="sandlotAuditPersistence" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="true" />
+                <property name="showSql" value="true" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="transactionManagerAudit" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactoryAudit" />
+    </bean>
+    
+    <!-- IHE Data source configuration -->
+    
+    <tx:annotation-driven transaction-manager="transactionManagerIhe" />
+    
+    <bean id="iheDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://172.16.244.32:5432/interopihe"/>
+        <property name="username" value="interopsvc"/>
+        <property name="password" value="Sandlot1!"/>
+    </bean>
+
+    <bean id="entityManagerFactoryIhe"
+            class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+            p:packagesToScan="net.sandlotnow.interop.ihe"
+            p:dataSource-ref="iheDataSource"
+            >
+        <property name="persistenceUnitName" value="sandlotIhePersistence" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="true" />
+                <property name="showSql" value="true" />
+            </bean>
+        </property>
+    </bean>
+    <bean id="transactionManagerIhe" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactoryIhe" />
+    </bean>
+        
+</beans>

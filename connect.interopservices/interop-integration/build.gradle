@@ -1,0 +1,127 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'net.sandlotnow.interop'
+version = '1.0-SNAPSHOT'
+
+description = """interop-integration"""
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+
+
+repositories {
+        
+     maven { url "http://repo.openehealth.org/maven2/releases" }
+     maven { url "http://repo.openehealth.org/maven2/snapshots" }
+     maven { url "https://nexus.codehaus.org/content/repositories/releases/" }
+     maven { url "http://repository.codehaus.org" }
+     maven { url "http://download.java.net/maven/2/" }
+     maven { url "http://repository.jboss.com/maven2" }
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile group: 'net.sandlotnow.interop', name: 'interop-configuration', version:'1.0-SNAPSHOT'
+    compile group: 'net.sandlotnow.interop', name: 'interop-ihe', version:'1.0-SNAPSHOT'
+    compile group: 'net.sandlotnow.interop', name: 'interop-audit', version:'1.0-SNAPSHOT'
+    compile group: 'org.apache.geronimo.specs', name: 'geronimo-javamail_1.4_spec', version:'1.7.1'
+    compile(group: 'org.openehealth.ipf.commons', name: 'ipf-commons-ihe-ws', version:'3.0.1') {
+exclude(module: 'slf4j-log4j12')
+exclude(module: 'log4j')
+exclude(module: 'groovy')
+    }
+    compile(group: 'org.openehealth.ipf.commons', name: 'ipf-commons-ihe-xds', version:'3.0.1') {
+exclude(module: 'slf4j-log4j12')
+exclude(module: 'log4j')
+    }
+    compile(group: 'org.openehealth.ipf.platform-camel', name: 'ipf-platform-camel-ihe-ws', version:'3.0.1') {
+exclude(module: 'groovy')
+    }
+    compile(group: 'org.openehealth.ipf.platform-camel', name: 'ipf-platform-camel-ihe-xds', version:'3.0.1') {
+exclude(module: 'slf4j-log4j12')
+exclude(module: 'log4j')
+exclude(module: 'groovy')
+    }
+    compile(group: 'org.openehealth.ipf.platform-camel', name: 'ipf-platform-camel-ihe-xds', version:'3.0.1') {
+exclude(module: 'slf4j-log4j12')
+exclude(module: 'log4j')
+exclude(module: 'groovy')
+    }
+    compile(group: 'org.openehealth.ipf.commons', name: 'ipf-commons-xml', version:'3.0.1') {
+exclude(module: 'groovy')
+exclude(module: 'groovy-xml')
+    }
+    compile(group: 'org.openehealth.ipf.platform-camel', name: 'ipf-platform-camel-hl7', version:'3.0.1') {
+exclude(module: 'groovy')
+    }
+    compile(group: 'org.openehealth.ipf.platform-camel', name: 'ipf-platform-camel-ihe-hl7v3', version:'3.0.1') {
+exclude(module: 'groovy')
+    }
+    compile group: 'ca.uhn.hapi', name: 'hapi-base', version:'2.2'
+    compile group: 'ca.uhn.hapi', name: 'hapi-structures-v22', version:'2.2'
+    compile group: 'ca.uhn.hapi', name: 'hapi-structures-v25', version:'2.2'
+    compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.10'
+    compile(group: 'org.apache.camel', name: 'camel-core', version:'2.15.0') {
+exclude(module: 'jaxb-impl')
+exclude(module: 'jaxb-core')
+    }
+    compile group: 'org.apache.camel', name: 'camel-jaxb', version:'2.15.0'
+    compile(group: 'org.apache.camel', name: 'camel-spring', version:'2.15.0') {
+exclude(module: 'spring-aop')
+exclude(module: 'jaxb-impl')
+exclude(module: 'jaxb-core')
+    }
+    compile(group: 'org.apache.camel', name: 'camel-groovy', version:'2.15.0') {
+exclude(module: 'groovy-all')
+exclude(module: 'jaxb-impl')
+exclude(module: 'jaxb-core')
+    }
+    compile group: 'org.apache.camel', name: 'camel-sql', version:'2.15.0'
+    compile(group: 'org.apache.camel', name: 'camel-cxf', version:'2.15.0') {
+exclude(module: 'activation')
+    }
+    compile group: 'org.apache.camel', name: 'camel-jackson', version:'2.15.0'
+    compile(group: 'org.apache.camel', name: 'camel-jetty', version:'2.15.0') {
+exclude(module: 'geronimo-servlet_2.5_spec')
+exclude(module: 'jetty-server')
+exclude(module: 'jetty-security')
+exclude(module: 'jetty-servlet')
+exclude(module: 'jetty-servlets')
+exclude(module: 'jetty-client')
+exclude(module: 'jetty-jmx')
+exclude(module: 'commons-codec')
+exclude(module: 'jaxb-impl')
+exclude(module: 'jaxb-core')
+    }
+    compile(group: 'org.apache.cxf', name: 'cxf-rt-frontend-jaxws', version:'3.0.4') {
+exclude(module: 'asm')
+    }
+    compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http', version:'3.0.4'
+    compile group: 'org.apache.derby', name: 'derby', version:'10.9.1.0'
+    compile group: 'commons-logging', name: 'commons-logging', version:'1.2'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.6.3'
+    compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version:'2.6.3'
+    compile group: 'org.springframework', name: 'spring-orm', version:'4.1.5.RELEASE'
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version:'4.3.10.Final'
+    compile group: 'org.hibernate', name: 'hibernate-jpamodelgen', version:'4.3.10.Final'
+    compile group: 'org.postgresql', name: 'postgresql', version:'9.4-1201-jdbc41'
+    compile group: 'commons-dbcp', name: 'commons-dbcp', version:'1.4'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.1.3'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version:'3.3.2'
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version:'2.3.10'
+    testCompile group: 'org.springframework', name: 'spring-test', version:'4.1.5.RELEASE'
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+    testCompile(group: 'org.openehealth.ipf.commons', name: 'ipf-commons-ihe-core', version:'3.0.1') {
+exclude(module: 'groovy')
+    }
+    testCompile(group: 'org.apache.cxf', name: 'cxf-rt-transports-http-jetty', version:'3.0.4') {
+exclude(module: 'geronimo-servlet_2.5_spec')
+    }
+    testCompile group: 'org.slf4j', name: 'jcl-over-slf4j', version:'1.7.10'
+    providedCompile group: 'org.apache.tomcat', name: 'tomcat-catalina', version:'7.0.39'
+    providedCompile group: 'org.apache.tomcat', name: 'tomcat-coyote', version:'7.0.39'
+    providedCompile(group: 'org.apache.tomcat', name: 'tomcat-jasper', version:'7.0.39') {
+exclude(module: 'ecj')
+    }
+}

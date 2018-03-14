@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+"http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  <display-name>Sandlot Interoperability Services System</display-name>
+  <context-param>
+    <!-- configures the classpath of the Spring application context -->
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:context.xml</param-value>
+  </context-param>
+
+  <listener>
+    <listener-class>
+      org.springframework.web.context.ContextLoaderListener
+    </listener-class>
+  </listener>
+  
+  <!-- CFX Servlet for all IHE Services in camel -->
+  <servlet>
+    <servlet-name>CXFServlet</servlet-name>
+    <servlet-class>
+        org.apache.cxf.transport.servlet.CXFServlet
+    </servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <!-- configures the address of the servlet path under which our web services are published -->
+    <servlet-name>CXFServlet</servlet-name>
+    <url-pattern>/services/*</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  <!-- Jersey servlet for javax.ws services -->
+  <!-- <servlet>
+    <servlet-name>JerseyConfigServlet</servlet-name>
+    <servlet-class>
+        com.sun.jersey.spi.spring.container.servlet.SpringServlet
+    </servlet-class>
+    <init-param>
+        <param-name>com.sun.jersey.config.property.packages</param-name>
+        <param-value>net.sandlotnow.interop.configuration.service</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JerseyConfigServlet</servlet-name>
+    <url-pattern>/integration/*</url-pattern>
+  </servlet-mapping> -->
+  
+</web-app>

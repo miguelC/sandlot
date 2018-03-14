@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"  
+       xmlns:cxf="http://camel.apache.org/schema/cxf"     
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core-2.5.xsd
+http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+
+<!-- Routes configuration for QA -->
+
+    <!-- this is an included XML file where we only the the routeContext -->
+    <routeContext id="sandlotRoutes" xmlns="http://camel.apache.org/schema/spring">
+        
+        <camel:route id="fileConsumerIti41">
+          <camel:from uri="file:/usr/local/OHP/data/in/?moveFailed=/usr/local/OHP/data/.error&amp;preMove=/usr/local/OHP/data/processing&amp;move=/usr/local/OHP/data/processed"/>
+          <unmarshal ref="ebxmlJaxb"/>
+          <camel:process ref="iti41Processor"/>
+        </camel:route>
+
+        <camel:route id="routeOhpIti41" errorHandlerRef="ohpDeadLetterErrorHandler">
+          <camel:from uri="direct:ohpIti41Route"/>          
+          <camel:onException>
+            <camel:exception>net.sandlotnow.interop.integration.route.ihe.InteropXdsException</camel:exception>
+            <camel:redeliveryPolicy maximumRedeliveries="0"/>
+            <camel:handled>
+                <camel:constant>true</camel:constant>
+            </camel:handled>
+            <to uri="direct:ohpDeadLetter"/>
+          </camel:onException>
+          <camel:process ref="iti41ProcessorIti45MPI001" id="iti41ProcessorIti45MPI001"/>
+          <camel:process ref="iti41ProcessorPXS001" id="iti41ProcessorPXS001"/>
+          <camel:process ref="registryResponseFailureEventProcessor" id="registryResponseFailureEventProcessor"/>
+       </camel:route>
+        
+       <camel:route id="routeIti18PXS001">
+          <camel:from uri="direct:iti18RoutePXS001"/>  
+          <camel:process ref="iti18ProcessorPXS001" id="iti18ProcessorPXS001"/>
+       </camel:route>
+        
+       <camel:route id="routeIti18PXS001Iti45MPI001">
+          <camel:from uri="direct:iti18RoutePXS001Iti45MPI001"/>  
+          <camel:process ref="iti18ProcessorIti45MPI001" id="iti18ProcessorIti45MPI001"/>
+          <camel:process ref="iti18ProcessorPXS001" id="iti18ProcessorPXS001-2"/>
+       </camel:route>
+        
+       <camel:route id="routeIti43PXS001">
+          <camel:from uri="direct:iti43RoutePXS001"/>  
+          <camel:process ref="iti43ProcessorPXS001" id="iti43ProcessorPXS001"/>
+       </camel:route>
+       
+       <camel:route id="routeIti47MPI001">
+          <camel:from uri="direct:iti47RouteMPI001"/>  
+          <camel:process ref="iti47ProcessorMPI001" id="iti47ProcessorMPI001"/>
+       </camel:route>
+       
+    </routeContext>
+        
+    <!-- HL7 Beans -->
+    
+    <!-- Custom Routes -->
+    
+    <bean id="routeOhpDeadLetter"
+        class="net.sandlotnow.interop.integration.route.custom.OHPDeadLetterRouteBuilder">
+        <property name="endpointName" value="ohpDeadLetter"/>
+        <property name="errorDirectory" value="/usr/local/OHP/data/out"/>
+        <property name="backupDirectory" value="/usr/local/OHP/data/processing"/>
+        <property name="aggregationStrategy" ref="ohpFailureEventMessageAggregationStrategy"/>
+    </bean>
+    
+    <bean id="routeOhpDeadLetterInterop"
+        class="net.sandlotnow.interop.integration.route.custom.OHPDeadLetterRouteBuilder">
+        <property name="endpointName" value="ohpDeadLetterInterop"/>
+        <property name="errorDirectory" value="/usr/local/OHP/data/trouble"/>
+        <property name="backupDirectory" value="/usr/local/OHP/data/processing"/>
+        <property name="aggregationStrategy" ref="ohpFailureEventMessageAggregationStrategy"/>
+    </bean>
+    
+    <bean id="ohpFailureEventMessageAggregationStrategy" class="net.sandlotnow.interop.integration.route.custom.OHPFailureEventMessageAggregationStrategy">
+    </bean>
+        
+    <!-- Processors -->
+    <bean id="iti18Processor" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti18">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti41Processor" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti41">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti43Processor" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti43">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti44Processor" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti44">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti45Processor" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti45">
+        <property name="producer" ref="template"/>
+    </bean>
+    <bean id="iti47Processor" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti47">
+        <property name="producer" ref="template"/>
+    </bean>
+    
+    <!-- Custom Processor -->
+    
+    <bean id="iti41ProcessorIti45MPI001" class="net.sandlotnow.interop.integration.processor.ihe.Iti41PatientIdentityResolverIti45Processor">
+        <property name="iti45Processor" ref="iti45ProcessorMPI001"/>
+    </bean>
+    
+    <bean id="iti18ProcessorIti45MPI001" class="net.sandlotnow.interop.integration.processor.ihe.Iti18PatientIdentityResolverIti45Processor">
+        <property name="iti45Processor" ref="iti45ProcessorMPI001"/>
+    </bean>
+    
+    <bean id="iti45ProcessorMPI001" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti45">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="2.16.840.1.113883.3.3281.100.400.1.1.2"/>
+    </bean>
+    
+    <bean id="iti47ProcessorMPI001" class="net.sandlotnow.interop.integration.processor.ihe.InteropProcessorIti47">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="2.16.840.1.113883.3.3281.100.400.1.1.2"/>
+    </bean>
+    
+    <bean id="iti41ProcessorPXS001" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti41">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="1.2.840.113619.20.2.2.1"/>
+    </bean>
+    
+    <bean id="iti18ProcessorPXS001" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti18">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="1.2.840.113619.20.2.2.1"/>
+    </bean>
+    
+    <bean id="iti43ProcessorPXS001" class="net.sandlotnow.interop.integration.route.ihe.InteropCamelProcessorIti43">
+        <property name="producer" ref="template"/>
+        <property name="destinationIdentifier" value="1.2.840.113619.20.2.2.1"/>
+    </bean>
+    
+    <bean id="registryResponseFailureEventProcessor" class="net.sandlotnow.interop.integration.processor.ihe.RegistryResponseFailureEventProcessor">
+    </bean>
+    
+    <!-- Error Handlers -->
+    
+    <bean id="ohpDeadLetterErrorHandler" class="org.apache.camel.builder.DeadLetterChannelBuilder">
+        <property name="deadLetterUri" value="direct:ohpDeadLetterInterop"/>
+        <property name="redeliveryPolicy" ref="ohpRedeliveryPolicyConfig"/>
+    </bean>
+     
+    <bean id="ohpRedeliveryPolicyConfig" class="org.apache.camel.processor.RedeliveryPolicy">
+        <property name="maximumRedeliveries" value="0"/>
+        <property name="redeliveryDelay" value="5000"/>
+    </bean>
+    
+</beans>

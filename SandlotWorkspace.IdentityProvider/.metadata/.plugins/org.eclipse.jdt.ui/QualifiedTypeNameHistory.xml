@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.springframework.ldap.core.LdapTemplate"/>
+<fullyQualifiedTypeName name="org.springframework.ldap.core.AttributesMapper"/>
+<fullyQualifiedTypeName name="javax.naming.NamingException"/>
+<fullyQualifiedTypeName name="org.springframework.context.ApplicationContext"/>
+<fullyQualifiedTypeName name="org.springframework.context.support.ClassPathXmlApplicationContext"/>
+<fullyQualifiedTypeName name="org.springframework.boot.autoconfigure.jersey.JerseyProperties.Filter"/>
+<fullyQualifiedTypeName name="org.springframework.LdapDataEntry"/>
+<fullyQualifiedTypeName name="org.springframework.ldap.filter.Filter"/>
+<fullyQualifiedTypeName name="org.springframework.http.MediaType"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="com.sandlotsolutions.IdentityProvider.Model.LDAPServerConfiguration"/>
+<fullyQualifiedTypeName name="com.sandlotsolutions.IdentityProvider.Model.LDAPConnectionManager"/>
+</qualifiedTypeNameHistroy>

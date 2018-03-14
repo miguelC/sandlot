@@ -1,0 +1,5 @@
+moduleName = TutorialsBasicExtension
+moduleVersion = 2.5
+moduleFactory=org.openehealth.ipf.commons.core.config.ExtensionModuleFactory
+extensionClasses = net.sandlotnow.interop.integration.processor.InteropModelExtensionModule,net.sandlotnow.interop.integration.route.xds.RegRepModelExtension
+staticExtensionClasses =
